@@ -20,23 +20,36 @@ router.get('/', function(req, res, next) {
     res.render('index.html');
 });
 
-router.post('/getPDFLinks', function(req, res, next) { 
+router.post('/pdflinks', function(req, res, next) { 
     var urls = req.body.urls.split(',');
-    var PdfLinkCollection = [];
+    var selector = req.body.selector;
+    var PdfLinkCollection = []; 
     var errors = [];
     async.each(urls, function(url, callback) {
         jsdom.env(
-            url,
+            url.trim(),
             ["http://code.jquery.com/jquery.js"],
             function (err, window) {
                 if(!err) {
-                    var pdfUppercase = window.$('a[href*=".PDF"]').attr('href'),
-                    pdfLowercase = window.$('a[href*=".pdf"]').attr('href');
-                    if(pdfUppercase) {
-                        PdfLinkCollection.push(window.location.origin + pdfUppercase);
-                    }
-                    if(pdfLowercase) {
-                        PdfLinkCollection.push(window.location.origin + pdfLowercase);
+                    if(selector && selector.trim()) {
+                        try{
+                            var result = eval(selector.trim());
+                            if(result) {
+                                PdfLinkCollection.push(window.location.origin + result);
+                            }
+                        } catch(e) {
+                            errors.push('Failed to evaluate the expression. Please use jquery selectors only');
+                        }
+                    } else {
+                        var pdfUppercase = window.$('a[href*=".PDF"]').attr('href'),
+                        pdfLowercase = window.$('a[href*=".pdf"]').attr('href');
+
+                        if(pdfUppercase) {
+                            PdfLinkCollection.push(window.location.origin + pdfUppercase);
+                        }
+                        if(pdfLowercase) {
+                            PdfLinkCollection.push(window.location.origin + pdfLowercase);
+                        }
                     }
                 } else {
                     errors.push(err);

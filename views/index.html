@@ -6,17 +6,37 @@
 	
 	<!-- STYLES -->
 	<link rel="stylesheet" href="stylesheets/app.min.css">
-
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<!-- JS -->
 	<script src="javascripts/app.min.js"></script>
 
 </head>
 <body>
 
-	<h1>Extract PDF's</h1>
-	<form method="post" action="/getPDFLinks">
-		<textarea name="urls" rows="20" cols="100" placeholder="Enter comma separataed links"></textarea>
-		<button type="submit">Fetch</button>
-	</form>
+	<div class="container">
+		<h1>Extract PDF's</h1>
+		<h5>This tool is used to scrape the DOM for the URL's listed below to extract PDF information. This can be extended to extract any information from the DOM.</h5>
+		<form method="post" action="/pdflinks">
+			<div class="form-group">
+				<textarea name="urls" rows="15" class="form-control" cols="100" placeholder="Enter comma separated links"></textarea>
+			</div>
+			<div class="form-group">
+				<input type="text" name="selector" class="form-control" placeholder="Enter your jquery expression"/>
+			</div>
+			<div class="panel panel-info">
+				<div class="panel-heading">Use "jquery expression" only if you know what you are doing</div>
+				<div class="panel-body">
+					If you have a specific use case for scraping PDF files, use jquery expression that needs to be run on the DOM loaded by the page. For example the default expression that is ran on the DOM is 
+					<code>window.$('a[href*=".pdf"]').attr('href')</code>
+
+					<p>Make sure your expression returns the value from the selected DOM element</p>
+
+				</div>
+			</div>
+			<button class="btn btn-primary" type="submit">Fetch</button>
+		</form>
+	</div>
+	<script   src="https://code.jquery.com/jquery-3.1.0.slim.min.js"   integrity="sha256-cRpWjoSOw5KcyIOaZNo4i6fZ9tKPhYYb6i5T9RSVJG8="   crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </body>
 </html>
