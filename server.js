@@ -41,14 +41,17 @@ router.post('/pdflinks', function(req, res, next) {
                             errors.push('Failed to evaluate the expression. Please use jquery selectors only');
                         }
                     } else {
-                        var pdfUppercase = window.$('a[href*=".PDF"]').attr('href'),
-                        pdfLowercase = window.$('a[href*=".pdf"]').attr('href');
-
+                        var pdfUppercase = window.$('a[href*=".PDF"]'),
+                        pdfLowercase = window.$('a[href*=".pdf"]');
                         if(pdfUppercase) {
-                            PdfLinkCollection.push(window.location.origin + pdfUppercase);
+                            pdfUppercase.each(function (index, elem) {
+                                PdfLinkCollection.push(window.location.origin + window.$(elem).attr('href'));
+                            });
                         }
-                        if(pdfLowercase) {
-                            PdfLinkCollection.push(window.location.origin + pdfLowercase);
+                        if(pdfLowercase) {;
+                            pdfLowercase.each(function (index, elem) {
+                                PdfLinkCollection.push(window.location.origin + window.$(elem).attr('href'));
+                            });
                         }
                     }
                 } else {
